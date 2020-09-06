@@ -6,6 +6,7 @@ from sklearn.preprocessing import OneHotEncoder
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from datetime import datetime
+import os
 
 oneHot = OneHotEncoder() 
 
@@ -106,13 +107,27 @@ logdir = log_dir('logs')
 
 file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph() )
 
+checkpoint_path = "/tmp/my_logcls_model.ckpt"
+checkpoint_epoch_path = checkpoint_path + ".epoch"
+final_model_path = "./my_logcls_model"
+
 with tf.Session() as sess:
-    
+
+    if os.path.isfile(checkpoint_epoch_path):
+        # if the checkpoint file exists, restore the model and load the epoch number
+        with open(checkpoint_epoch_path, "rb") as f:
+            start_epoch = int(f.read())
+        print("Training was interrupted. Continuing at epoch", start_epoch)
+        saver.restore(sess, checkpoint_path)
+    else:
+        start_epoch = 0
+        sess.run(init)
+
     sess.run(init)
 
     print( 'X name ',X.op.name)
 
-    for epoch in range(n_epochs):
+    for epoch in range(start_epoch,n_epochs):
 
         for batch in range(n_batches):
 
@@ -141,6 +156,11 @@ with tf.Session() as sess:
             file_writer.add_summary(cost_summary_val,step)
 
             file_writer.add_summary(acc_sum_val,step)
+
+        saver.save(sess,final_model_path)
+
+        with open(checkpoint_epoch_path,'wb') as f:
+            f.write(b"%d" % (epoch + 1))
 
         if epoch % 100 == 0 :
 
