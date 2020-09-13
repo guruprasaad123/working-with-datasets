@@ -97,7 +97,7 @@ Y_test_hot = oneHot.transform(Y_test).toarray()
 
 # hyper parameters
 n_epochs = 1000
-batch_size = 50
+batch_size = 250
 n_batches = int(np.ceil(m / batch_size))
 learning_rate = 0.001
 
