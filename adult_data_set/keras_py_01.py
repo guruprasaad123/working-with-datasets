@@ -21,29 +21,53 @@ import tensorflow as tf
 import os
 
 
-dataframe = pd.read_csv('./data/adult_preprocessed.csv')
+# import csv's
+train_data = pd.read_csv('./data/train_preprocessed.csv')
+test_data = pd.read_csv('./data/test_preprocessed.csv')
 
-X = dataframe.iloc[:, 0:88].values
-y = dataframe.iloc[:, 88].values
+# store target columns in different variable for later usage
+train_target = train_data['target']
+test_target = test_data['target']
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)
+# drop 'target' column 
+train_data.drop(['target'],axis=1,inplace=True)
+test_data.drop(['target'],axis=1,inplace=True)
 
-print('before scaling\n')
-print( 'X ' ,X_train.shape , X_test.shape)
-print('Y ',y_train.shape , y_test.shape)
+# Extracting features
+X_train = train_data.values
+X_test = test_data.values
+
+# extracting targets
+# Y_train = train_target.values.reshape(-1,1)
+# Y_test = test_target.values.reshape(-1,1)
+
+
+# to array 
+
+Y_train = train_target.values
+Y_test =  test_target.values
+
+# print('Y shapes ',Y_train_arr.shape , Y_test_arr.shape)
+
+# one-hot encoding
+# oneHot.fit(Y_train)
+# Y_train_hot = oneHot.transform(Y_train).toarray()
+
+# oneHot.fit(Y_test)
+# Y_test_hot = oneHot.transform(Y_test).toarray()
+
+# extracting rows , columns
+(m,n) = X_train.shape
+
 
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-print('after scaling\n')
-print( 'X ' ,X_train.shape , X_test.shape)
-print('Y ',y_train.shape , y_test.shape)
-
 
 classifier = Sequential()
 
-classifier.add(Dense(6 ,  kernel_initializer='random_normal', bias_initializer='zeros',  activation = 'relu', input_dim = 88))
+classifier.add(Dense(6 ,  kernel_initializer='random_normal', bias_initializer='zeros',  activation = 'relu', input_dim = n))
 classifier.add(Dense(6,  kernel_initializer='random_normal', bias_initializer='zeros', activation = 'relu'))
 classifier.add(Dense(1,  kernel_initializer='random_normal', bias_initializer='zeros', activation = 'sigmoid'))
 classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
@@ -52,16 +76,16 @@ callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
 # This callback will stop the training when there is no improvement in  
 # the validation loss for three consecutive epochs. 
 
-history = classifier.fit(X_train, y_train, batch_size = 10, epochs = 100,callbacks=[callback])
+history = classifier.fit(X_train, Y_train, batch_size = 10, epochs = 100,callbacks=[callback])
 
 y_pred = classifier.predict(X_test)
 y_pred = (y_pred > 0.5)
 
 #classification report
 print ("\nClassification Report\n")
-print (classification_report(y_test, y_pred))
+print (classification_report(Y_test, y_pred))
 print('\nAccuracy Report\n')
-print(accuracy_score(y_test,y_pred))
+print(accuracy_score(Y_test,y_pred))
 
 '''
               precision    recall  f1-score   support

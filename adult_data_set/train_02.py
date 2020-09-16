@@ -98,6 +98,11 @@ test_data.drop(['target'],axis=1,inplace=True)
 X_train = train_data.values
 X_test = test_data.values
 
+# Using Standard Scaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.fit_transform(X_test)
+
 # extracting targets
 Y_train = train_target.values.reshape(-1,1)
 Y_test = test_target.values.reshape(-1,1)

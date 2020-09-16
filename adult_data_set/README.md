@@ -57,3 +57,136 @@ native-country: United-States, Cambodia, England, Puerto-Rico, Canada, Germany, 
 
 Ron Kohavi, "Scaling Up the Accuracy of Naive-Bayes Classifiers: a Decision-Tree Hybrid", Proceedings of the Second International Conference on Knowledge Discovery and Data Mining, 1996
 [[Web Link\]](http://robotics.stanford.edu/~ronnyk/nbtree.pdf)
+
+## Training
+
+### Tensorflow NN ( with out  Standard Scalar )
+
+```
+Epoch: 0        Loss: 3.7956421
+Epoch: 500      Loss: 3.7956421
+Epoch: 1000     Loss: 3.7956421
+Epoch: 1500     Loss: 3.7956421
+Epoch: 2000     Loss: 3.7956421
+Epoch: 2500     Loss: 3.7956421
+Epoch: 3000     Loss: 3.7956421
+Epoch: 3500     Loss: 3.7956421
+Epoch: 4000     Loss: 3.7956421
+Epoch: 4500     Loss: 3.7956421
+Epoch: 5000     Loss: 3.7956421
+Epoch: 5500     Loss: 3.7956421
+Epoch: 6000     Loss: 3.7956421
+Epoch: 6500     Loss: 3.7956421
+Epoch: 7000     Loss: 3.7956421
+Epoch: 7500     Loss: 3.7956421
+Epoch: 8000     Loss: 3.7956421
+Epoch: 8500     Loss: 3.7956421
+Epoch: 9000     Loss: 3.7956421
+Epoch: 9500     Loss: 3.7956421
+Epoch: 10000    Loss: 3.7956421
+Epoch: 10500    Loss: 3.7956421
+Epoch: 11000    Loss: 3.7956421
+Epoch: 11500    Loss: 3.7956421
+Epoch: 12000    Loss: 3.7956421
+Epoch: 12500    Loss: 3.7956421
+Epoch: 13000    Loss: 3.7956421
+Epoch: 13500    Loss: 3.7956421
+Epoch: 14000    Loss: 3.7956421
+Epoch: 14500    Loss: 3.7956421
+Epoch: 15000    Loss: 3.7956421
+Epoch: 15500    Loss: 3.7956421
+Epoch: 16000    Loss: 3.7956421
+Epoch: 16500    Loss: 3.7956421
+Epoch: 17000    Loss: 3.7956421
+Epoch: 17500    Loss: 3.7956421
+Epoch: 18000    Loss: 3.7956421
+Epoch: 18500    Loss: 3.7956421
+Epoch: 19000    Loss: 3.7956421
+Epoch: 19500    Loss: 3.7956421
+Epoch: 20000    Loss: 3.7956421
+Precision Score = 1.0 , Recall Score = 0.0031201248049922 , Accuracy = 0.7645107794361525
+```
+
+### tensorflow NN ( with Standard Scalar )
+
+```
+Epoch: 1000     Loss: 0.38121223
+Epoch: 1500     Loss: 0.38116452
+Epoch: 2000     Loss: 0.3811807
+Epoch: 2500     Loss: 0.38116992
+Epoch: 3000     Loss: 0.38127676
+Epoch: 3500     Loss: 0.38117567
+Epoch: 4000     Loss: 0.38118824
+Epoch: 4500     Loss: 0.38116214
+Epoch: 5000     Loss: 0.381172
+Epoch: 5500     Loss: 0.38115495
+Epoch: 6000     Loss: 0.38115293
+Epoch: 6500     Loss: 0.38109973
+Epoch: 7000     Loss: 0.38117087
+Epoch: 7500     Loss: 0.38123262
+Epoch: 8000     Loss: 0.38127348
+Epoch: 8500     Loss: 0.38125506
+Epoch: 9000     Loss: 0.38124475
+Epoch: 9500     Loss: 0.38121778
+Epoch: 10000    Loss: 0.38132796
+Epoch: 10500    Loss: 0.38119754
+Epoch: 11000    Loss: 0.38120332
+Epoch: 11500    Loss: 0.38118866
+Epoch: 12000    Loss: 0.38121364
+Epoch: 12500    Loss: 0.38121584
+Epoch: 13000    Loss: 0.38108385
+Epoch: 13500    Loss: 0.38121992
+Epoch: 14000    Loss: 0.3811831
+Epoch: 14500    Loss: 0.3811838
+Epoch: 15000    Loss: 0.3811719
+Epoch: 15500    Loss: 0.3811667
+Epoch: 16000    Loss: 0.3811848
+Epoch: 16500    Loss: 0.38120025
+Epoch: 17000    Loss: 0.38121003
+Epoch: 17500    Loss: 0.38122192
+Epoch: 18000    Loss: 0.38122833
+Epoch: 18500    Loss: 0.3812673
+Epoch: 19000    Loss: 0.38125345
+Epoch: 19500    Loss: 0.38123137
+Epoch: 20000    Loss: 0.38120726
+Precision Score = 0.7028779894608836 , Recall Score = 0.45085803432137284 , Accuracy = 0.8252564338799828
+time took  0:29:04.437904
+```
+
+
+
+### not using Standard Scalar
+
+              precision    recall  f1-score   support
+    
+           0       0.80      0.99      0.89     12435
+           1       0.91      0.19      0.31      3846
+    
+    accuracy                           0.80     16281
+    
+    macro avg       0.86      0.59      0.60     16281
+    weighted avg       0.83      0.80      0.75     16281
+    
+    
+    Accuracy Report
+    
+    0.8039432467293164
+  
+
+### using Standard Scalar
+
+              precision    recall  f1-score   support
+    
+           0       0.87      0.94      0.91     12435
+           1       0.75      0.56      0.64      3846
+    
+    accuracy                           0.85     16281
+    
+    macro avg       0.81      0.75      0.77     16281
+    weighted avg       0.84      0.85      0.84     16281
+    
+    Accuracy Report
+    
+    0.8508691112339537
+
+
