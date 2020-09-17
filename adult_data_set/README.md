@@ -2,6 +2,8 @@
 
 This dataset is taken from https://archive.ics.uci.edu/ml/datasets/Adult
 
+Also taken from Kaggle https://www.kaggle.com/wenruliu/adult-income-dataset/notebooks
+
 | **abstract**: Predict whether income exceeds $50K/yr based on census data. Also known as "Census Income" dataset. | ![img](https://archive.ics.uci.edu/ml/assets/MLimages/Large2.jpg) |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 |                                                              |                                                              |

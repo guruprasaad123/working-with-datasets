@@ -154,9 +154,11 @@ with tf.Session() as sess:
     for epoch in range(n_epochs):
         for X_batch, y_batch in shuffle_batch(X_train, Y_train_arr, batch_size):
             sess.run(training_op, feed_dict={'X:0': X_batch, 'y:0': y_batch})
+            sess.run()
         acc_batch = accuracy.eval(feed_dict={'X:0': X_test, 'y:0': Y_test_arr})
         acc_val = accuracy.eval(feed_dict={'X:0': X_test, 'y:0': Y_test_arr })
-        print(epoch, "Batch accuracy:", acc_batch, "Val accuracy:", acc_val)
+        if epoch % 100 == 0:
+            print("epoch : {} , Training Batch Acc : {} , Test Batch Acc : {} ".format( epoch , acc_batch , acc_val ) )
 
     save_path = saver.save(sess, "./my_model_final.ckpt")
 
