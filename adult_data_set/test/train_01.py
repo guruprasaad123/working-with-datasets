@@ -8,6 +8,9 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import confusion_matrix
+
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -148,7 +151,21 @@ with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
 
     r_score = recall_score(y_test, y_pred)
 
-    print('Precision Score = {} , Recall Score = {} '.format(p_score,r_score))
+    f1score = f1_score(y_test,y_pred)
+
+    accuracy_scr = accuracy_score(y_test,y_pred)
+
+    confustionmatrix = confusion_matrix(y_test,y_pred)
+
+    print('Precision Score = {} , Recall Score = {} , f1 Score = {} \n'.format(p_score,r_score,f1score))
+
+    print('Confusion Matrix = {} \n'.format(confustionmatrix))
+
+    class_report = classification_report(y_test,y_pred)
+
+    print('Accuracy = {}\n'.format(accuracy_scr) )
+
+    print(class_report)
 
     endTime = datetime.now()
 

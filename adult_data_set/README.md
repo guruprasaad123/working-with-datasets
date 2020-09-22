@@ -168,12 +168,13 @@ time took  0:29:04.437904
     
     macro avg       0.86      0.59      0.60     16281
     weighted avg       0.83      0.80      0.75     16281
-    
-    
+
+
+​    
     Accuracy Report
     
     0.8039432467293164
-  
+
 
 ### using Standard Scalar
 
@@ -191,4 +192,70 @@ time took  0:29:04.437904
     
     0.8508691112339537
 
+`test/`
+
+### Tensorflow legacy NN ( with Scalar )
+
+```
+Epoch: 0        Loss: 1.8629074
+Epoch: 500      Loss: 0.076648176
+Epoch: 1000     Loss: 0.07133827
+Epoch: 1500     Loss: 0.0695342
+Epoch: 2000     Loss: 0.06859268
+Epoch: 2500     Loss: 0.06799724
+Epoch: 3000     Loss: 0.06757587
+Epoch: 3500     Loss: 0.067256205
+Epoch: 4000     Loss: 0.066989094
+Epoch: 4500     Loss: 0.06676394
+Epoch: 5000     Loss: 0.06657918
+Epoch: 5500     Loss: 0.06640689
+Epoch: 6000     Loss: 0.06624419
+Epoch: 6500     Loss: 0.06609243
+Epoch: 7000     Loss: 0.065956116
+Epoch: 7500     Loss: 0.065836236
+Epoch: 8000     Loss: 0.065724164
+Epoch: 8500     Loss: 0.065618075
+Epoch: 9000     Loss: 0.06551629
+Epoch: 9500     Loss: 0.06541922
+Epoch: 10000    Loss: 0.065326884
+Epoch: 10500    Loss: 0.06523914
+Epoch: 11000    Loss: 0.06515646
+Epoch: 11500    Loss: 0.06507879
+Epoch: 12000    Loss: 0.06500577
+Epoch: 12500    Loss: 0.06493838
+Epoch: 13000    Loss: 0.064877525
+Epoch: 13500    Loss: 0.064823695
+Epoch: 14000    Loss: 0.06477601
+Epoch: 14500    Loss: 0.06473261
+Epoch: 15000    Loss: 0.06469396
+Epoch: 15500    Loss: 0.064658545
+Epoch: 16000    Loss: 0.06462604
+Epoch: 16500    Loss: 0.0645951
+Epoch: 17000    Loss: 0.06456618
+Epoch: 17500    Loss: 0.06453868
+Epoch: 18000    Loss: 0.0645129
+Epoch: 18500    Loss: 0.064488366
+Epoch: 19000    Loss: 0.06446525
+Epoch: 19500    Loss: 0.06444325
+Epoch: 20000    Loss: 0.06442255
+Precision Score = 0.04878048780487805 , Recall Score = 0.6666666666666666 , f1 Score = 0.0909090909090909 
+
+Confusion Matrix = [[9727   39]
+ [   1    2]]
+
+Accuracy = 0.9959054150885454
+
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00      9766
+           1       0.05      0.67      0.09         3
+
+    accuracy                           1.00      9769
+   macro avg       0.52      0.83      0.54      9769
+weighted avg       1.00      1.00      1.00      9769
+
+time took  1:36:35.970100
+```
+
+ 
 
