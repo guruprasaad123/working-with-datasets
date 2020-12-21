@@ -147,8 +147,8 @@ def compute_cost(Z3, Y):
 
 # GRADED FUNCTION: model
 
-def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.009,
-          num_epochs = 100, minibatch_size = 64, print_cost = True):
+def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.001,
+          num_epochs = 175, minibatch_size = 64, print_cost = True):
     """
     Implements a three-layer ConvNet in Tensorflow:
     CONV2D -> RELU -> MAXPOOL -> CONV2D -> RELU -> MAXPOOL -> FLATTEN -> FULLYCONNECTED
