@@ -1,3 +1,3 @@
-model_checkpoint_path: "cnn_model"
+model_checkpoint_path: "cnn_model.ckpt"
 all_model_checkpoint_paths: "temp/cnn_model.ckpt"
-all_model_checkpoint_paths: "cnn_model"
+all_model_checkpoint_paths: "cnn_model.ckpt"

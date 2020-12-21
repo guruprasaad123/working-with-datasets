@@ -32,10 +32,10 @@ def create_placeholders(n_H0, n_W0, n_C0, n_y):
     X -- placeholder for the data input, of shape [None, n_H0, n_W0, n_C0] and dtype "float"
     Y -- placeholder for the input labels, of shape [None, n_y] and dtype "float"
     """
-
+    # with tf.name_scope('input'):
     ### START CODE HERE ### (≈2 lines)
-    X = tf.placeholder(tf.float32, shape=(None, n_H0, n_W0, n_C0))
-    Y = tf.placeholder(tf.float32, shape=(None, n_y))
+    X = tf.placeholder(tf.float32, shape=(None, n_H0, n_W0, n_C0),name="X")
+    Y = tf.placeholder(tf.float32, shape=(None, n_y),name="Y")
     ### END CODE HERE ###
     
     return X, Y
@@ -183,7 +183,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.001,
 
     checkpoint_path = "./temp/cnn_model.ckpt"
     checkpoint_epoch_path = checkpoint_path + ".epoch"
-    final_model_path = "./cnn_model"
+    final_model_path = "./cnn_model.ckpt"
     
     # Create Placeholders of the correct shape
     ### START CODE HERE ### (1 line)
@@ -218,13 +218,15 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.001,
 
     # Using Tensorflow's FileWritter to log values in Tensorboard
 
-    file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph() )
+    # file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph() )
      
     # Start the session to compute the tensorflow graph
     with tf.Session() as sess:
         
         # Run the initialization
         sess.run(init)
+
+        file_writer = tf.summary.FileWriter(logdir, sess.graph )
 
         # file writer to save the graph in tensorboard & log the values
 
