@@ -121,6 +121,7 @@ with tf.name_scope("train"):
     training_op = optimizer.minimize(loss)
 
 with tf.name_scope("eval"):
+
     correct = tf.nn.in_top_k(logits, y, 1)
     accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
 
@@ -151,6 +152,7 @@ with tf.Session() as sess:
         for X_batch, y_batch in shuffle_batch(X_train, Y_train, batch_size):
             sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
         acc_batch = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
+        # cost_batch = cost.eval(feed_dict={X: X_batch , y : y_batch})
         # acc_test = accuracy.eval(feed_dict={X: X_test, y: Y_test})
         
         acc_test , logits_val , Y_proba_val = sess.run( 
@@ -159,7 +161,7 @@ with tf.Session() as sess:
             )
 
         print(epoch, "Last batch accuracy:", acc_batch, "Test accuracy:", acc_test)
-        print('logits_val',logits_val.shape)
-        print('Y_proba',Y_proba_val.shape)
+        # print('logits_val',logits_val.reshape((-1)),logits_val.shape)
+        # print('Y_proba',Y_proba_val.reshape((-1)),Y_proba_val.shape)
 
         save_path = saver.save(sess, "./my_signs_model")
