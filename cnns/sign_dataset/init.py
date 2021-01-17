@@ -65,4 +65,4 @@ print ("Y_test shape: " + str(Y_test.shape))
 
 conv_layers = {}
 
-_, _, parameters = model(X_train, Y_train, X_test, Y_test)
+# _, _, parameters = model(X_train, Y_train, X_test, Y_test)
