@@ -7,6 +7,7 @@ from datetime import datetime
 import math
 
 # log dir for tensorboard
+
 def log_dir(prefix=""):
     now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     root_logdir = "tf_logs"
