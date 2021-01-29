@@ -16,8 +16,8 @@ def build_model(batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x = N
 
 
         """ Model """
-        train_logits = build_network(train_inputs)
-        test_logits = build_network(test_inputs, is_training=False, reuse=True)
+        train_logits = build_network(train_inputs , layers = 50 , label_dim = 6 )
+        test_logits = build_network(test_inputs,layers = 50 , label_dim = 6, is_training=False, reuse=True)
 
         train_loss, train_accuracy = classification_loss(logit=train_logits, label=train_labels)
         test_loss, test_accuracy = classification_loss(logit=test_logits, label=test_labels)
@@ -45,7 +45,7 @@ def build_model(batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x = N
 
 def build_network(x, layers = 50 , label_dim = 6 , is_training=True , reuse=False):
     
-    with tf.variable_scope("network"):
+    with tf.variable_scope("network", reuse=reuse):
 
         if layers < 50 :
             residual_block = resblock
