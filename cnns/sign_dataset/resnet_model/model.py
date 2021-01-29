@@ -2,7 +2,48 @@ import tensorflow as tf
 import tensorflow.contrib as tf_contrib
 
 
-def build_model(layers , label_dim , is_training=True , reuse=False):
+
+def build_model(batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x = None , test_y = None ):
+
+        """ Graph Input """
+        train_inputs = tf.placeholder(tf.float32, [batch_size, img_size, img_size, c_dim], name='train_inputs')
+        train_labels = tf.placeholder(tf.float32, [batch_size, label_dim], name='train_labels')
+
+        test_inputs = tf.placeholder(tf.float32, [len(test_x), img_size, img_size, c_dim], name='test_inputs')
+        test_labels = tf.placeholder(tf.float32, [len(test_y), label_dim], name='test_labels')
+
+        lr = tf.placeholder(tf.float32, name='learning_rate')
+
+
+        """ Model """
+        train_logits = build_network(train_inputs)
+        test_logits = build_network(test_inputs, is_training=False, reuse=True)
+
+        train_loss, train_accuracy = classification_loss(logit=train_logits, label=train_labels)
+        test_loss, test_accuracy = classification_loss(logit=test_logits, label=test_labels)
+        
+        reg_loss = tf.losses.get_regularization_loss()
+        train_loss += reg_loss
+        test_loss += reg_loss
+
+
+        """ Training """
+        optim = tf.train.MomentumOptimizer(lr, momentum=0.9).minimize(train_loss)
+
+
+        """" Summary """
+        summary_train_loss = tf.summary.scalar("train_loss", train_loss)
+        summary_train_accuracy = tf.summary.scalar("train_accuracy", train_accuracy)
+
+
+        summary_test_loss = tf.summary.scalar("test_loss", test_loss)
+        summary_test_accuracy = tf.summary.scalar("test_accuracy", test_accuracy)
+
+
+        train_summary = tf.summary.merge([summary_train_loss, summary_train_accuracy])
+        test_summary = tf.summary.merge([summary_test_loss, summary_test_accuracy])
+
+def build_network(x, layers = 50 , label_dim = 6 , is_training=True , reuse=False):
     
     with tf.variable_scope("network"):
 
