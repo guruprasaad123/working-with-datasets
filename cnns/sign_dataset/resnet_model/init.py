@@ -63,7 +63,17 @@ print ("Y_train shape: " + str(Y_train.shape))
 print ("X_test shape: " + str(X_test.shape))
 print ("Y_test shape: " + str(Y_test.shape))
 
-build_model( batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x=X_train  , test_y=Y_train )
+img_size = X_train.shape[1]
+c_dim = X_train.shape[3]
+label_dim = Y_test.shape[1]
+
+print( "img_size : {} ".format(img_size) )
+print( "c_dim : {} ".format(c_dim) )
+print( "label_dim : {} ".format(label_dim) )
+
+# build_model( batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x=X_train  , test_y=Y_train )
+
+train( X_train , Y_train , X_test , Y_test )
 
 conv_layers = {}
 

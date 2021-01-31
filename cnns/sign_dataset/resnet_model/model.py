@@ -1,7 +1,32 @@
 import tensorflow as tf
 import tensorflow.contrib as tf_contrib
+import numpy as np
+import os
+import time
+import sys
 
+def save(sess , checkpoint_dir , step , saver , model_dir='' , model_name="ResNet"):
+    checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
 
+    if not os.path.exists(checkpoint_dir):
+        os.makedirs(checkpoint_dir)
+
+    saver.save(sess, os.path.join(checkpoint_dir, model_name+'.model'), global_step=step)
+
+def load(sess , checkpoint_dir, saver ,model_dir='ResNet'):
+    print(" [*] Reading checkpoints...")
+    checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
+
+    ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
+    if ckpt and ckpt.model_checkpoint_path:
+        ckpt_name = os.path.basename(ckpt.model_checkpoint_path)
+        saver.restore(sess, os.path.join(checkpoint_dir, ckpt_name))
+        counter = int(ckpt_name.split('-')[-1])
+        print(" [*] Success to read {}".format(ckpt_name))
+        return True, counter
+    else:
+        print(" [*] Failed to find a checkpoint")
+        return False, 0
 
 def build_model(batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x = None , test_y = None ):
 
@@ -42,6 +67,206 @@ def build_model(batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x = N
 
         train_summary = tf.summary.merge([summary_train_loss, summary_train_accuracy])
         test_summary = tf.summary.merge([summary_test_loss, summary_test_accuracy])
+        
+        return ( 
+            
+            train_inputs ,
+            train_labels ,
+            test_inputs ,
+            test_labels ,
+            lr ,
+
+            train_logits ,
+            test_logits ,
+
+            train_accuracy ,
+            test_accuracy ,
+
+            train_loss ,
+            test_loss ,
+
+            optim ,
+
+            summary_train_loss ,
+            summary_train_accuracy ,
+
+            summary_test_loss ,
+            summary_test_accuracy ,
+            
+            train_summary , 
+            test_summary 
+            )
+
+def train(train_x , train_y ,test_x , test_y):
+
+    img_size = train_x.shape[1]
+    c_dim = train_x.shape[3]
+    label_dim = test_y.shape[1]
+    
+    batch_size = 64
+
+    (
+    train_inputs ,
+    train_labels ,
+    test_inputs ,
+    test_labels ,
+    lr ,
+
+    train_logits ,
+    test_logits ,
+
+    train_accuracy ,
+    test_accuracy ,
+
+    train_loss ,
+    test_loss ,
+
+    optim ,
+
+    summary_train_loss ,
+    summary_train_accuracy ,
+
+    summary_test_loss ,
+    summary_test_accuracy ,
+    
+    train_summary , 
+    test_summary 
+    ) = build_model( batch_size=batch_size , img_size=img_size , c_dim=c_dim , label_dim=label_dim , test_x=test_x  , test_y=test_y )
+    
+    model_name = 'ResNet'
+
+    log_dir = 'logs'
+
+    checkpoint_dir = 'checkpoint'
+
+    epoch = 100
+
+    init_lr = float(0.1)
+
+    res_n = 50
+
+    iteration = len(train_x) // batch_size    
+
+    model_dir = "{}{}_{}_{}".format( model_name , res_n , batch_size , init_lr )
+
+    init = tf.global_variables_initializer()
+
+    # saver to save model
+    saver = tf.train.Saver()
+
+    early_stopping = False
+
+    with tf.Session( config=tf.ConfigProto(allow_soft_placement=True) ) as sess:
+
+        sess.run( init )
+
+        # summary writer
+        writer = tf.summary.FileWriter(log_dir + '/' + model_dir, sess.graph)
+
+        # restore check-point if it exits
+        # sess , checkpoint_dir, saver ,model_dir='ResNet'
+        could_load, checkpoint_counter = load( sess , checkpoint_dir , saver=saver , model_dir=model_dir )
+        if could_load:
+            epoch_lr = init_lr
+            start_epoch = (int)(checkpoint_counter / iteration)
+            start_batch_id = checkpoint_counter - start_epoch * iteration
+            counter = checkpoint_counter
+
+            if start_epoch >= int(epoch * 0.75) :
+                epoch_lr = epoch_lr * 0.01
+            elif start_epoch >= int(epoch * 0.5) and start_epoch < int(epoch * 0.75) :
+                epoch_lr = epoch_lr * 0.1
+            print(" [*] Load SUCCESS")
+        else:
+            epoch_lr = init_lr
+            start_epoch = 0
+            start_batch_id = 0
+            counter = 1
+            print(" [!] Load failed...")
+
+        # loop for epoch
+        start_time = time.time()
+        for epoch in range(start_epoch, epoch):
+
+            best_loss = max_value()
+            patience = 0
+
+            if early_stopping == True :
+                break
+
+            if epoch == int(epoch * 0.5) or epoch == int(epoch * 0.75) :
+                epoch_lr = epoch_lr * 0.1
+
+            # get batch data
+            for idx in range(start_batch_id, iteration):
+                batch_x = train_x[idx*batch_size:(idx+1)*batch_size]
+                batch_y = train_y[idx*batch_size:(idx+1)*batch_size]
+
+                # batch_x = data_augmentation(batch_x, img_size, dataset_name)
+
+                train_feed_dict = {
+                    train_inputs : batch_x,
+                    train_labels : batch_y,
+                    lr : epoch_lr
+                }
+
+                test_feed_dict = {
+                    test_inputs : test_x,
+                    test_labels : test_y
+                }
+
+
+                # update network
+                _, summary_str, train_loss_val, train_accuracy_val = sess.run(
+                    [optim, train_summary, train_loss, train_accuracy], feed_dict=train_feed_dict)
+                writer.add_summary(summary_str, counter)
+
+                # test
+                summary_str, test_loss_val, test_accuracy_val = sess.run(
+                    [test_summary, test_loss, test_accuracy], feed_dict=test_feed_dict)
+                writer.add_summary(summary_str, counter)
+
+                # display training status
+                counter += 1
+                print("Epoch: [%2d] [%3d/%3d] time: %4.4f, train_accuracy : %.2f , train_loss : %.2f , test_accuracy : %.2f , test_loss : %.2f , learning_rate : %.4f" \
+                        % (epoch, idx, iteration, time.time() - start_time, train_accuracy_val , train_loss_val , test_accuracy_val , test_loss_val , epoch_lr))
+
+                # Early Stopping - based on 'test_loss_val'
+
+                best_loss = min( test_loss_val , best_loss )
+                
+                if best_loss < test_loss_val :
+                    print( ' [*] Found Best Test Loss : {} , patience : {} '.format(best_loss,patience) )
+
+                if best_loss < test_loss_val and ( 0.9 > float( test_loss_val - best_loss ) and 0.1 < float( test_loss_val - best_loss )  ) :
+
+                    patience += 1
+
+                    if patience > 5:
+
+                        print( ' [*] Early Stopping at : \n')
+
+                        print("Epoch: [%2d] [%3d/%3d] time: %4.4f, train_accuracy : %.2f , train_loss : %.2f , test_accuracy : %.2f , test_loss : %.2f , learning_rate : %.4f" \
+                                % (epoch, idx, iteration, time.time() - start_time, train_accuracy_val , train_loss_val , test_accuracy_val , test_loss_val , epoch_lr))
+                        
+                        # Save the Model
+                        
+                        save( sess , checkpoint_dir, counter , saver = saver , model_dir = model_dir , model_name = model_name )
+
+                        early_stopping = True
+
+                        break
+
+            # After an epoch, start_batch_id is set to zero
+            # non-zero value is only for the first epoch after loading pre-trained model
+            start_batch_id = 0
+
+            # save model
+            # sess , checkpoint_dir , step , saver , model_dir='' , model_name="ResNet"
+            save( sess , checkpoint_dir, counter , saver = saver , model_dir = model_dir , model_name = model_name )
+
+        # save model for final step
+        save( sess , checkpoint_dir, counter , saver = saver , model_dir = model_dir , model_name = model_name )
 
 def build_network(x, layers = 50 , label_dim = 6 , is_training=True , reuse=False):
     
@@ -245,3 +470,10 @@ def classification_loss(logit, label) :
     accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
 
     return loss, accuracy
+
+
+def max_value():
+    return float(sys.maxsize)
+
+def min_value():
+    return float( -sys.maxsize - 1 )

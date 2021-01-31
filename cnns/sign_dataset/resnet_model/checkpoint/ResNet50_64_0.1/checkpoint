@@ -1,0 +1,3 @@
+model_checkpoint_path: "ResNet.model-348"
+all_model_checkpoint_paths: "ResNet.model-336"
+all_model_checkpoint_paths: "ResNet.model-348"
