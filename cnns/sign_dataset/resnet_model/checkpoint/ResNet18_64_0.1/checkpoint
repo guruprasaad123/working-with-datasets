@@ -1,0 +1,4 @@
+model_checkpoint_path: "ResNet.model-976"
+all_model_checkpoint_paths: "ResNet.model-960"
+all_model_checkpoint_paths: "final/ResNet.model.ckpt"
+all_model_checkpoint_paths: "ResNet.model-976"

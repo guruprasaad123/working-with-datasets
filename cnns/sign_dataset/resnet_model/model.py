@@ -5,13 +5,26 @@ import os
 import time
 import sys
 
-def save(sess , checkpoint_dir , step , saver , model_dir='' , model_name="ResNet"):
+def save(sess , checkpoint_dir , step , saver , model_dir='' , model_name="ResNet" , final=False):
+    
     checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
+    checkpoint_dir_final = os.path.join(checkpoint_dir, 'final')
 
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
 
-    saver.save(sess, os.path.join(checkpoint_dir, model_name+'.model'), global_step=step)
+    if final == True:
+
+        if not os.path.exists(checkpoint_dir_final):
+            os.makedirs(checkpoint_dir_final)
+        
+        saver.save( sess , os.path.join( checkpoint_dir_final , model_name+'.model.ckpt' ) )
+
+    else:
+        saver.save( sess, os.path.join(checkpoint_dir, model_name+'.model'), global_step=step)
+
+
+
 
 def load(sess , checkpoint_dir, saver ,model_dir='ResNet'):
     print(" [*] Reading checkpoints...")
@@ -28,21 +41,21 @@ def load(sess , checkpoint_dir, saver ,model_dir='ResNet'):
         print(" [*] Failed to find a checkpoint")
         return False, 0
 
-def build_model(batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x = None , test_y = None ):
+def build_model(batch_size=64 , img_size=28 , c_dim=3 , label_dim=6 , test_x = None , test_y = None , layers=18 ):
 
         """ Graph Input """
         train_inputs = tf.placeholder(tf.float32, [batch_size, img_size, img_size, c_dim], name='train_inputs')
         train_labels = tf.placeholder(tf.float32, [batch_size, label_dim], name='train_labels')
 
-        test_inputs = tf.placeholder(tf.float32, [len(test_x), img_size, img_size, c_dim], name='test_inputs')
-        test_labels = tf.placeholder(tf.float32, [len(test_y), label_dim], name='test_labels')
+        test_inputs = tf.placeholder(tf.float32, [ None , img_size, img_size, c_dim], name='test_inputs')
+        test_labels = tf.placeholder(tf.float32, [ None , label_dim], name='test_labels')
 
         lr = tf.placeholder(tf.float32, name='learning_rate')
 
 
         """ Model """
-        train_logits = build_network(train_inputs , layers = 50 , label_dim = 6 )
-        test_logits = build_network(test_inputs,layers = 50 , label_dim = 6, is_training=False, reuse=True)
+        train_logits = build_network(train_inputs , layers = layers , label_dim = 6 )
+        test_logits = build_network(test_inputs,layers = layers , label_dim = 6, is_training=False, reuse=True)
 
         train_loss, train_accuracy = classification_loss(logit=train_logits, label=train_labels)
         test_loss, test_accuracy = classification_loss(logit=test_logits, label=test_labels)
@@ -105,6 +118,8 @@ def train(train_x , train_y ,test_x , test_y):
     
     batch_size = 64
 
+    res_n = 18
+
     (
     train_inputs ,
     train_labels ,
@@ -131,7 +146,7 @@ def train(train_x , train_y ,test_x , test_y):
     
     train_summary , 
     test_summary 
-    ) = build_model( batch_size=batch_size , img_size=img_size , c_dim=c_dim , label_dim=label_dim , test_x=test_x  , test_y=test_y )
+    ) = build_model( batch_size=batch_size , img_size=img_size , c_dim=c_dim , label_dim=label_dim , test_x=test_x  , test_y=test_y , layers=res_n )
     
     model_name = 'ResNet'
 
@@ -142,8 +157,6 @@ def train(train_x , train_y ,test_x , test_y):
     epoch = 100
 
     init_lr = float(0.1)
-
-    res_n = 50
 
     iteration = len(train_x) // batch_size    
 
@@ -236,9 +249,9 @@ def train(train_x , train_y ,test_x , test_y):
                 best_loss = min( test_loss_val , best_loss )
                 
                 if best_loss < test_loss_val :
-                    print( ' [*] Found Best Test Loss : {} , patience : {} '.format(best_loss,patience) )
+                    print( ' [*] Found Best Test Loss : {} , patience : {} , diff : {} '.format(best_loss,patience,float( test_loss_val - best_loss )) )
 
-                if best_loss < test_loss_val and ( 0.9 > float( test_loss_val - best_loss ) and 0.1 < float( test_loss_val - best_loss )  ) :
+                if best_loss < test_loss_val and ( 0.01 > float( test_loss_val - best_loss ) and 0.001 < float( test_loss_val - best_loss )  ) :
 
                     patience += 1
 
@@ -251,7 +264,7 @@ def train(train_x , train_y ,test_x , test_y):
                         
                         # Save the Model
                         
-                        save( sess , checkpoint_dir, counter , saver = saver , model_dir = model_dir , model_name = model_name )
+                        save( sess , checkpoint_dir, counter , saver = saver , model_dir = model_dir , model_name = model_name , final=True )
 
                         early_stopping = True
 
@@ -266,7 +279,7 @@ def train(train_x , train_y ,test_x , test_y):
             save( sess , checkpoint_dir, counter , saver = saver , model_dir = model_dir , model_name = model_name )
 
         # save model for final step
-        save( sess , checkpoint_dir, counter , saver = saver , model_dir = model_dir , model_name = model_name )
+        save( sess , checkpoint_dir, counter , saver = saver , model_dir = model_dir , model_name = model_name , final=True)
 
 def build_network(x, layers = 50 , label_dim = 6 , is_training=True , reuse=False):
     
