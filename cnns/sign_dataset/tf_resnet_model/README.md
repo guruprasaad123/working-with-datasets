@@ -8,3 +8,4 @@ https://medium.com/@SeoJaeDuk/wide-residual-networks-with-interactive-code-5e190
 
 https://github.com/szagoruyko/wide-residual-networks?utm_source=catalyzex.com
 
+https://stackoverflow.com/questions/44873273/what-do-the-options-in-configproto-like-allow-soft-placement-and-log-device-plac

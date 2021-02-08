@@ -20,7 +20,7 @@ height = width = 64
 channels = 3
 
 #read the image
-im = Image.open(os.path.join("../","model_test","hand_signs_1.jpg") )
+im = Image.open( os.path.join("../","model_test","hand_signs_1.jpg") )
 
 #image size
 size=(height,width)
