@@ -1,3 +1,17 @@
 ./hockey_team_classification/dataset
 hockey_team_classification/dataset
 cnns/HASYv2/hasy-data
+
+cnns/intel-image-classification/seg_pred
+cnns/intel-image-classification/seg_test
+cnns/intel-image-classification/seg_train
+
+cnns/caltech/101_ObjectCategories
+cnns/caltech/Annotations
+cnns/caltech/Annotations.tar
+cnns/caltech/101_ObjectCategories.tar.gz
+
+cnns/dataset/test
+cnns/dataset/train
+cnns/dataset/train.h5
+cnns/dataset/test.h5
