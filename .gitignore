@@ -1,5 +1,6 @@
 ./hockey_team_classification/dataset
 hockey_team_classification/dataset
+
 cnns/HASYv2/hasy-data
 
 cnns/intel-image-classification/seg_pred
@@ -15,3 +16,5 @@ cnns/dataset/test
 cnns/dataset/train
 cnns/dataset/train.h5
 cnns/dataset/test.h5
+
+cnns/sign_dataset/keras_resnet/best_model.h5
