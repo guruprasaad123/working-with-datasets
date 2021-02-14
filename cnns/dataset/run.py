@@ -57,19 +57,11 @@ def get_mapping(filename):
         
         return obj           
 
-csv_path = os.path.join( 'train.csv' )
-
-mapping = get_mapping( csv_path )
-
-train_dir = 'train'
-
-test_dir = 'test'
-
 def get_list(dir,mapping=None):
     
     images = os.listdir( os.path.join( dir ) )
 
-    img_list = []
+    img_list , image_list = ( [] , [] )
 
     class_list = []
 
@@ -86,8 +78,12 @@ def get_list(dir,mapping=None):
         # appending the image into the list
         img_list.append(img)
 
+        # appending the image_name into the list
+        image_list.append(image)
+
     # converting the list to numpy array
     array_list = np.array(img_list)
+    array_image = np.array( image_list , dtype='S' )
 
     if mapping:
         
@@ -101,28 +97,76 @@ def get_list(dir,mapping=None):
         return ( array_list , unique_ones , classes )
     
     else:
-        return array_list
+        return ( array_list , array_image )
 
 def create_dataset( obj=dict({}) , name='data' ):
 
     filename = '{}.h5'.format(name)
 
-    hf = h5py.File( filename , 'w' )
+    hf = h5py.File( filename , 'w-' )
 
     for key in obj:
             hf.create_dataset( key , data=obj[key] )
     
     hf.close()
 
+def extract_values( dir , filename ):
+
+    with open( filename , mode='r') as csv_file:
+        
+        csv_reader = csv.DictReader(csv_file)
+
+        image_list , class_list , img_list = ( list() , list() , list() )
+
+        for i, row in enumerate(csv_reader):
+
+            if 1 == 0:
+                print('Column names are : ' , row )
+            else :
+                
+                image = row['Image']
+                
+                image_path = os.path.join( dir , image )
+
+                img = pre_process_image( image_path )
+
+                class_name = row['Class']
+
+                image_list.append(image)
+
+                img_list.append(img)
+
+                class_list.append(class_name)
+
+        image_array , img_array , class_array = ( np.array( image_list , dtype='S' ) , np.array( img_list ) , np.array( class_list , dtype='S' ) )
+
+        unique_ones = np.unique(class_list).tolist()
+        print('unique_ones' , unique_ones)
+    
+        class_map = list(map( lambda x : unique_ones.index(x) , class_list ))
+        # print('class_map' , class_map)
+        classes = np.array( class_map , dtype='S' )
+
+        return ( image_array , img_array , class_array , classes )
+
+csv_path = os.path.join( 'train.csv' )
+
+# mapping = get_mapping( csv_path )
+
+train_dir = 'train'
+test_dir = 'test'
+
+train_array , train_x , train_y , classes = extract_values( train_dir , csv_path )
+
 # ['Airplane', 'Candle', 'Christmas_Tree', 'Jacket', 'Miscellaneous', 'Snowman']
 
-train_x , list_class , train_y = get_list( train_dir , mapping )
+# train_x , classes , train_y = get_list( train_dir , mapping )
 
-test_x = get_list( test_dir )
+test_x , test_array = get_list( test_dir )
 
-train_obj = dict( { 'train_x' : train_x , 'list_class' : np.array(list_class,dtype='S') , 'train_y' : train_y } )
+train_obj = dict( { 'train_array' : train_array , 'train_x' : train_x , 'classes' : classes , 'train_y' : train_y } )
 
-create_dataset( train_obj , 'train' )
+create_dataset( train_obj , 'train_data' )
 
 print( 'train_x => ',train_x.shape )
 
@@ -130,6 +174,6 @@ print( 'train_y => ',train_y.shape )
 
 print( 'test => ',test_x.shape )
 
-test_obj = dict({ 'test_x' : test_x , 'list_class' : np.array(list_class,dtype='S') })
+test_obj = dict({ 'test_x' : test_x , 'test_array' : test_array , 'classes' : classes })
 
-create_dataset( test_obj , 'test' )
+create_dataset( test_obj , 'test_data' )

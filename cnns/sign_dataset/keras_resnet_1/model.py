@@ -128,8 +128,6 @@ config = {
 
         ]
     } ,
-
-  
 }
 
 def identity_block(inp, filters, kernel_size, block, layer):
@@ -276,5 +274,8 @@ def create_model( layers=50 , input_shape = ( 224 , 224 , 3 ) , classes=6 ):
 if __name__ == '__main__':
     
     model = create_model( layers=18 )
+    
+    keras.utils.plot_model( model , "model.png" , show_shapes=True )
+
 
     # plot_model(model, to_file='model.png')

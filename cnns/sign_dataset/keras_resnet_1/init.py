@@ -76,13 +76,17 @@ input_shape = ( img_size , img_size , c_dim )
 model = create_model( layers=18 , input_shape=input_shape , classes=label_dim )
 
 model.compile(
-    optimizer=keras.optimizers.RMSprop(learning_rate=1e-3),  # Optimizer
+    # Optimizer
+    optimizer = keras.optimizers.Adam(learning_rate=1e-3) ,  
     # Loss function to minimize
-    loss='categorical_crossentropy',
+    loss = 'categorical_crossentropy' ,
     # List of metrics to monitor
-    metrics=[
+    metrics = [
         'accuracy'
-        ],
+        ] ,
 )
 
-model.fit( X_train , Y_train , batch_size=64, epochs=10)
+model.fit( X_train , Y_train , batch_size=64 , epochs=10 )
+
+
+predictions = model.predict(X_test)
