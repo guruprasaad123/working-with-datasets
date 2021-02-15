@@ -145,7 +145,9 @@ def extract_values( dir , filename ):
     
         class_map = list(map( lambda x : unique_ones.index(x) , class_list ))
         # print('class_map' , class_map)
-        classes = np.array( class_map , dtype='S' )
+        class_array = np.array( class_map )
+
+        classes = np.array( unique_ones , dtype='S' )
 
         return ( image_array , img_array , class_array , classes )
 
@@ -166,7 +168,7 @@ test_x , test_array = get_list( test_dir )
 
 train_obj = dict( { 'train_array' : train_array , 'train_x' : train_x , 'classes' : classes , 'train_y' : train_y } )
 
-create_dataset( train_obj , 'train_data' )
+create_dataset( train_obj , 'training' )
 
 print( 'train_x => ',train_x.shape )
 
@@ -176,4 +178,4 @@ print( 'test => ',test_x.shape )
 
 test_obj = dict({ 'test_x' : test_x , 'test_array' : test_array , 'classes' : classes })
 
-create_dataset( test_obj , 'test_data' )
+create_dataset( test_obj , 'testing' )
