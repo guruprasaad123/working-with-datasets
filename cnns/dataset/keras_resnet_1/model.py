@@ -237,7 +237,7 @@ def build_base_model( conv , options , n_layers ):
             if n_layers >= 50 and j == 0 :
                 conv = convolutional_block( conv , [ start_block , start_block , end_block ] , 3 , str(i+1) , str(j+1) , strides=strides )
             elif n_layers >=50 and j > 0 :
-                conv = identity_block( conv , [ start_block , start_block , end_block ] , 3 , str(i+1) , str(j+1) , strides=strides )
+                conv = identity_block( conv , [ start_block , start_block , end_block ] , 3 , str(i+1) , str(j+1) )
             else:
                 conv = convolutional_block( conv , [ start_block , start_block , end_block ] , 3 , str(i+1) , str(j+1) , strides=strides )
             
@@ -265,7 +265,12 @@ def create_model( layers=50 , input_shape = ( 224 , 224 , 3 ) , classes=6 ):
     conv_base = build_base_model( conv1 , options , layers )
 
     avg_pool = GlobalAveragePooling2D() ( conv_base )
-    dense = Dense( classes , activation='softmax') ( avg_pool )
+
+    dense = Dense( 128 , activation='relu') ( avg_pool )
+    dense = Dense( 128 , activation='relu') ( dense )
+    dense = Dense( 128 , activation='relu') ( dense )
+
+    dense = Dense( classes , activation='softmax') ( dense )
 
     model = Model(inp, dense)
 
