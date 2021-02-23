@@ -18,6 +18,20 @@ import h5py
 #     pred = labels[np.argmax(model.predict(img))]
 #     plt.imshow(img.reshape(150,150,3))
 #     plt.title(pred)
+
+# fig, ax = plt.subplots(nrows=6, ncols=4,figsize = (15,20))
+
+'''
+For Plotting Images
+'''
+# for X_batch, y_batch in training_set:
+#     i=0
+#     for row in ax:
+#         for col in row:
+#             col.imshow(X_batch[i])
+#             i+=1
+#     break
+# plt.show()   
     
 def pre_process_image(path,normalize=True):
 

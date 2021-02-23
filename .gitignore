@@ -16,5 +16,10 @@ cnns/dataset/test
 cnns/dataset/train
 cnns/dataset/train.h5
 cnns/dataset/test.h5
+cnns/dataset/inception/cifar-10-batches-py
+cnns/dataset/inception/cifar-10-python.tar
+cnns/dataset/inception/cifar-10-python.tar.gz
+cnns/dataset/inception_tf/cifar-10-batches-py
+cnns/dataset/keras_resnet_1/ckpt
 
 cnns/sign_dataset/keras_resnet/best_model.h5

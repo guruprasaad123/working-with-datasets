@@ -70,7 +70,6 @@ def identity_block(X, f, filters, stage, block):
     
     return X
 
-
 def convolutional_block(X, f, filters, stage, block, s = 2):
     """
     Implementation of the convolutional block as defined in Figure 4
