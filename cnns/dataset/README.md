@@ -24,6 +24,8 @@
 - [Region,Edge and clustering Based Segmentation | Kaggle](https://www.kaggle.com/accountstatus/region-edge-and-clustering-based-segmentation)
 - [Image Classification ResNet 91.5 accuracy | Kaggle](https://www.kaggle.com/shrijeethsuresh/image-classification-resnet-91-5-accuracy)
 - [Xception + ResNet | Learn How to Stack | Kaggle](https://www.kaggle.com/kabirnagpal/xception-resnet-learn-how-to-stack#Plotting-some-images)
+- [CNN Architectures : VGG, ResNet, Inception + TL | Kaggle](https://www.kaggle.com/shivamb/cnn-architectures-vgg-resnet-inception-tl#PreTrained-Model-:-VGG16)
+- 
 
 ## Inception
 
@@ -39,6 +41,8 @@
 
 - [Review: NIN — Network In Network (Image Classification) | by Sik-Ho Tsang | Towards Data Science](https://towardsdatascience.com/review-nin-network-in-network-image-classification-69e271e499ee)
 - [Illustrated: 10 CNN Architectures | by Raimi Karim | Towards Data Science](https://towardsdatascience.com/illustrated-10-cnn-architectures-95d78ace614d#bca5)
+- [Image Classification using CNN in PyTorch | by Manish Kumar | Analytics Vidhya | Medium](https://medium.com/analytics-vidhya/image-classification-using-cnn-in-pytorch-65b1968d9e1f)
+- 
 
 ### Code
 
@@ -47,12 +51,17 @@
 - [models/inception_v1.py at 9ff763923a2f0795c93c09a843f1ed5da4d556aa · tensorflow/models (github.com)](https://github.com/tensorflow/models/blob/9ff763923a2f0795c93c09a843f1ed5da4d556aa/research/slim/nets/inception_v1.py#L31)
 
 - [pretrained-models.pytorch/inceptionresnetv2.py at 8aae3d8f1135b6b13fed79c1d431e3449fdbf6e0 · Cadene/pretrained-models.pytorch (github.com)](https://github.com/Cadene/pretrained-models.pytorch/blob/8aae3d8f1135b6b13fed79c1d431e3449fdbf6e0/pretrainedmodels/models/inceptionresnetv2.py#L234)
+- 
 
 #### keras
 
 - [deep-learning-models/inception_v3.py at master · fchollet/deep-learning-models (github.com)](https://github.com/fchollet/deep-learning-models/blob/master/inception_v3.py)
+- 
 
+#### Pytorch
 
+- [Inception-v3-with-pytorch/InceptionV3FromScratch.ipynb at master · vatsmanish/Inception-v3-with-pytorch (github.com)](https://github.com/vatsmanish/Inception-v3-with-pytorch/blob/master/InceptionV3FromScratch.ipynb)
+- 
 
 # Normal Model
 
